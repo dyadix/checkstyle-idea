@@ -68,6 +68,9 @@ public class CheckStyleCodeStyleImporter implements SchemeImporter<CodeStyleSche
     
     
     private void importConfiguration(@NotNull Configuration configuration, CodeStyleScheme scheme) {
+        ModuleImporter moduleImporter = 
+                ModuleImporterFactory.getModuleImporter(configuration, scheme.getCodeStyleSettings());
+        if (moduleImporter != null) moduleImporter.importConfig(configuration);
         for (Configuration childConfig : configuration.getChildren()) {
             importConfiguration(childConfig, scheme);
         }
