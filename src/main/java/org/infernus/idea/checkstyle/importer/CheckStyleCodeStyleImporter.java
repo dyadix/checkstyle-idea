@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.xml.sax.InputSource;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -27,10 +26,10 @@ public class CheckStyleCodeStyleImporter implements SchemeImporter<CodeStyleSche
 
     @Nullable
     @Override
-    public CodeStyleScheme importScheme(@NotNull final Project project, 
-                                        @NotNull final VirtualFile selectedFile, 
-                                        final CodeStyleScheme currentScheme, 
-                                        final SchemeFactory<CodeStyleScheme> schemeFactory) throws SchemeImportException {
+    public CodeStyleScheme importScheme(@NotNull final Project project,
+                                        @NotNull final VirtualFile selectedFile,
+                                        @NotNull final CodeStyleScheme currentScheme,
+                                        @NotNull final SchemeFactory<CodeStyleScheme> schemeFactory) throws SchemeImportException {
         try {
             Configuration configuration = loadConfiguration(selectedFile);
             if (configuration != null) {
@@ -44,7 +43,7 @@ public class CheckStyleCodeStyleImporter implements SchemeImporter<CodeStyleSche
 
     @Nullable
     @Override
-    public String getAdditionalImportInfo(final CodeStyleScheme scheme) {
+    public String getAdditionalImportInfo(@NotNull final CodeStyleScheme scheme) {
         return null;
     }
     
@@ -55,15 +54,11 @@ public class CheckStyleCodeStyleImporter implements SchemeImporter<CodeStyleSche
             inputStream = selectedFile.getInputStream();
             InputSource inputSource = new InputSource(inputStream);
             return ConfigurationLoader.loadConfiguration(inputSource, null, false);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         finally {
-            if (inputStream != null) {
+            if (inputStream != null) //noinspection ThrowFromFinallyBlock
                 inputStream.close();
-            }
         }
-        return null;
     }
     
     
