@@ -1,21 +1,28 @@
 package org.infernus.idea.checkstyle.importer;
 
-import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.util.containers.HashMap;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import org.infernus.idea.checkstyle.importer.modules.LineLengthImporter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ModuleImporterFactory {
-    private final static String LINE_LENGTH_MODULE = "LineLength";
+import java.util.Collection;
+import java.util.Map;
+
+class ModuleImporterFactory {
+    
+    private final static Map<String, ModuleImporter> IMPORTERS_MAP = new HashMap<>();
+    static {
+        IMPORTERS_MAP.put("LineLength", new LineLengthImporter());
+    }
     
     @Nullable
-    public static ModuleImporter getModuleImporter(@NotNull Configuration configuration, 
-                                                   @NotNull CodeStyleSettings settings) {
+    static ModuleImporter getModuleImporter(@NotNull Configuration configuration) {
         String name = configuration.getName();
-        if (LINE_LENGTH_MODULE.equals(name)) {
-            return new LineLengthImporter(settings);
-        }
-        return null;
+        return IMPORTERS_MAP.get(name);
+    }
+    
+    static Collection<ModuleImporter> getAllImporters() {
+        return IMPORTERS_MAP.values();
     }
 }

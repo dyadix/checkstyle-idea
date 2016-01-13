@@ -10,10 +10,6 @@ public class LineLengthImporter extends ModuleImporter {
     private static final String MAX_PROP = "max";
     private int maxColumns = DEFAULT_MAX_COLUMNS;
 
-    public LineLengthImporter(@NotNull final CodeStyleSettings settings) {
-        super(settings);
-    }
-
 
     @Override
     protected void handleAttribute(@NotNull final String attrName, @NotNull final String attrValue) {
@@ -28,7 +24,12 @@ public class LineLengthImporter extends ModuleImporter {
     }
 
     @Override
-    protected void adjustCodeStyle() {
+    protected void adjustCodeStyle(@NotNull CodeStyleSettings settings) {
         settings.setRightMargin(JavaLanguage.INSTANCE, maxColumns);
+    }
+
+    @Override
+    protected void setDefaults(@NotNull final CodeStyleSettings settings) {
+        settings.setRightMargin(JavaLanguage.INSTANCE, DEFAULT_MAX_COLUMNS);
     }
 }
