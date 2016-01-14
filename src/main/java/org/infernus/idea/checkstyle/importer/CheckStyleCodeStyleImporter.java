@@ -33,7 +33,6 @@ public class CheckStyleCodeStyleImporter implements SchemeImporter<CodeStyleSche
         try {
             Configuration configuration = loadConfiguration(selectedFile);
             if (configuration != null) {
-                setDefaults(currentScheme);
                 importConfiguration(configuration, currentScheme);
                 return currentScheme;
             }
@@ -63,17 +62,10 @@ public class CheckStyleCodeStyleImporter implements SchemeImporter<CodeStyleSche
         }
     }
     
-    
-    private void setDefaults(@NotNull CodeStyleScheme scheme) {
-        for (ModuleImporter importer : ModuleImporterFactory.getAllImporters()) {
-            importer.setDefaults(scheme.getCodeStyleSettings());
-        }
-    }
-    
     private void importConfiguration(@NotNull Configuration configuration, CodeStyleScheme scheme) {
         ModuleImporter moduleImporter = 
                 ModuleImporterFactory.getModuleImporter(configuration);
-        if (moduleImporter != null) moduleImporter.importConfig(configuration, scheme.getCodeStyleSettings());
+        if (moduleImporter != null) moduleImporter.importTo(scheme.getCodeStyleSettings());
         for (Configuration childConfig : configuration.getChildren()) {
             importConfiguration(childConfig, scheme);
         }

@@ -1,13 +1,17 @@
 package org.infernus.idea.checkstyle.importer;
 
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ModuleImporter {
+    private final static String TOKENS_PROP = "tokens";
+    private int[] tokens;
 
-    void importConfig(@NotNull Configuration moduleConfig, @NotNull CodeStyleSettings settings) {
+    protected ModuleImporter(@NotNull Configuration moduleConfig) {
         for (String attrName : moduleConfig.getAttributeNames()) {
             try {
                 handleAttribute(attrName, moduleConfig.getAttribute(attrName));
@@ -15,12 +19,31 @@ public abstract class ModuleImporter {
                 // Ignore, shouldn't happen
             }
         }
-        adjustCodeStyle(settings);
+    }
+
+    @NotNull
+    protected CommonCodeStyleSettings getJavaSettings(@NotNull CodeStyleSettings settings) {
+        return settings.getCommonSettings(JavaLanguage.INSTANCE); 
+    }
+
+    protected boolean handleAttribute(@NotNull String attrName, @NotNull String attrValue) {
+        if (TOKENS_PROP.equals(attrName)) {
+            tokens = TokenSetUtil.getTokens(attrValue);
+        }
+        return false;
+    }
+
+    protected boolean appliesTo(int tokenId) {
+        if (tokens != null) {
+            for (int token : tokens) {
+                if (token == tokenId) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
     }
     
-    protected abstract void handleAttribute(@NotNull String attrName, @NotNull String attrValue);
-    
-    protected abstract void adjustCodeStyle(@NotNull CodeStyleSettings settings);
-    
-    protected abstract void setDefaults(@NotNull CodeStyleSettings settings);
+    public abstract void importTo(@NotNull CodeStyleSettings settings);
 }
