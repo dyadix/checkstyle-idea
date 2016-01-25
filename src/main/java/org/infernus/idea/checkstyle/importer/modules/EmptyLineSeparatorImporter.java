@@ -11,10 +11,6 @@ public class EmptyLineSeparatorImporter extends ModuleImporter {
     private boolean noEmptyLinesBetweenFields = false;
     private final static String NO_EMPTY_LINES_BETWEEN_FIELDS_PROP = "allowNoEmptyLineBetweenFields";
 
-    public EmptyLineSeparatorImporter(@NotNull final Configuration moduleConfig) {
-        super(moduleConfig);
-    }
-
     @Override
     protected boolean handleAttribute(@NotNull final String attrName, @NotNull final String attrValue) {
         if (!super.handleAttribute(attrName, attrValue)) {

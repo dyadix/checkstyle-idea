@@ -6,10 +6,12 @@ import com.intellij.openapi.options.SchemeImporter;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.codeStyle.CodeStyleScheme;
+import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.TestOnly;
 import org.xml.sax.InputSource;
 
 import java.io.InputStream;
@@ -33,7 +35,7 @@ public class CheckStyleCodeStyleImporter implements SchemeImporter<CodeStyleSche
         try {
             Configuration configuration = loadConfiguration(selectedFile);
             if (configuration != null) {
-                importConfiguration(configuration, currentScheme);
+                importConfiguration(configuration, currentScheme.getCodeStyleSettings());
                 return currentScheme;
             }
         } catch (Exception e) {
@@ -62,12 +64,12 @@ public class CheckStyleCodeStyleImporter implements SchemeImporter<CodeStyleSche
         }
     }
     
-    private void importConfiguration(@NotNull Configuration configuration, CodeStyleScheme scheme) {
+    static void importConfiguration(@NotNull Configuration configuration, @NotNull CodeStyleSettings settings) {
         ModuleImporter moduleImporter = 
                 ModuleImporterFactory.getModuleImporter(configuration);
-        if (moduleImporter != null) moduleImporter.importTo(scheme.getCodeStyleSettings());
+        if (moduleImporter != null) moduleImporter.importTo(settings);
         for (Configuration childConfig : configuration.getChildren()) {
-            importConfiguration(childConfig, scheme);
+            importConfiguration(childConfig, settings);
         }
     }
 }

@@ -11,15 +11,11 @@ public class LineLengthImporter extends ModuleImporter {
     private static final String MAX_PROP = "max";
     private int maxColumns = DEFAULT_MAX_COLUMNS;
 
-    public LineLengthImporter(@NotNull final Configuration moduleConfig) {
-        super(moduleConfig);
-    }
-
     @Override
     protected boolean handleAttribute(@NotNull final String attrName, @NotNull final String attrValue) {
         if (MAX_PROP.equals(attrName)) {
             try {
-                maxColumns = Integer.parseInt(attrName);
+                maxColumns = Integer.parseInt(attrValue);
             }
             catch (NumberFormatException nfe) {
                 // ignore

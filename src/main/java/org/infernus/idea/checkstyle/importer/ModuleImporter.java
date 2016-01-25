@@ -11,7 +11,12 @@ public abstract class ModuleImporter {
     private final static String TOKENS_PROP = "tokens";
     private int[] tokens;
 
-    protected ModuleImporter(@NotNull Configuration moduleConfig) {
+    @NotNull
+    protected CommonCodeStyleSettings getJavaSettings(@NotNull CodeStyleSettings settings) {
+        return settings.getCommonSettings(JavaLanguage.INSTANCE); 
+    }
+    
+    public void setFrom(@NotNull Configuration moduleConfig) {
         for (String attrName : moduleConfig.getAttributeNames()) {
             try {
                 handleAttribute(attrName, moduleConfig.getAttribute(attrName));
@@ -19,11 +24,6 @@ public abstract class ModuleImporter {
                 // Ignore, shouldn't happen
             }
         }
-    }
-
-    @NotNull
-    protected CommonCodeStyleSettings getJavaSettings(@NotNull CodeStyleSettings settings) {
-        return settings.getCommonSettings(JavaLanguage.INSTANCE); 
     }
 
     protected boolean handleAttribute(@NotNull String attrName, @NotNull String attrValue) {
