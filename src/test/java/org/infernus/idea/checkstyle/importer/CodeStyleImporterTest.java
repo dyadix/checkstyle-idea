@@ -34,7 +34,7 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
     private final static String FILE_SUFFIX =
             "</module>";
     
-    private void importConfiguration(@NotNull String configuration) throws CheckstyleException {
+    private void importConfiguration(@NotNull String configuration) throws Exception {
         configuration = FILE_PREFIX + configuration + FILE_SUFFIX;
         CheckStyleCodeStyleImporter.importConfiguration(loadConfiguration(configuration), codeStyleSettings);
     }
@@ -48,7 +48,7 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         return ConfigurationLoader.loadConfiguration(inputSource, null, false);
     }
     
-    public void testImportRightMargin() throws CheckstyleException {
+    public void testImportRightMargin() throws Exception {
         importConfiguration(
                 inTreeWalker(
                         "<module name=\"LineLength\">\n" +
@@ -59,7 +59,7 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         assertEquals(100, javaSettings.RIGHT_MARGIN);
     }
     
-    public void testEmptyLineSeparator() throws CheckstyleException {
+    public void testEmptyLineSeparator() throws Exception {
         javaSettings.BLANK_LINES_AROUND_FIELD = 0;
         javaSettings.BLANK_LINES_AROUND_METHOD = 0;
         importConfiguration(
@@ -73,7 +73,7 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         assertEquals(1, javaSettings.BLANK_LINES_AROUND_METHOD);
     }
     
-    public void testImportFileTabCharacter() throws CheckstyleException {
+    public void testImportFileTabCharacter() throws Exception {
         CommonCodeStyleSettings xmlSettings = codeStyleSettings.getCommonSettings(XMLLanguage.INSTANCE);
         CommonCodeStyleSettings.IndentOptions javaIndentOptions = javaSettings.getIndentOptions();
         assertNotNull(javaIndentOptions);
@@ -93,7 +93,7 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         assertFalse(xmlIndentOptions.USE_TAB_CHARACTER);
     }
     
-    public void testImportFileTabCharacterNoExplicitExtensions() throws CheckstyleException {
+    public void testImportFileTabCharacterNoExplicitExtensions() throws Exception {
         CommonCodeStyleSettings xmlSettings = codeStyleSettings.getCommonSettings(XMLLanguage.INSTANCE);
         CommonCodeStyleSettings.IndentOptions javaIndentOptions = javaSettings.getIndentOptions();
         assertNotNull(javaIndentOptions);
@@ -110,7 +110,7 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         assertFalse(xmlIndentOptions.USE_TAB_CHARACTER);
     }
     
-    public void testImportWhitespaceAfter() throws CheckstyleException {
+    public void testImportWhitespaceAfter() throws Exception {
         javaSettings.SPACE_AFTER_COMMA = false;
         javaSettings.SPACE_AFTER_SEMICOLON = false;
         javaSettings.SPACE_AFTER_TYPE_CAST = false;

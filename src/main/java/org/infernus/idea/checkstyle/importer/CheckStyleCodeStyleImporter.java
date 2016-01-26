@@ -11,7 +11,6 @@ import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.TestOnly;
 import org.xml.sax.InputSource;
 
 import java.io.InputStream;
@@ -63,8 +62,9 @@ public class CheckStyleCodeStyleImporter implements SchemeImporter<CodeStyleSche
                 inputStream.close();
         }
     }
-    
-    static void importConfiguration(@NotNull Configuration configuration, @NotNull CodeStyleSettings settings) {
+
+    static void importConfiguration(@NotNull Configuration configuration, @NotNull CodeStyleSettings settings) 
+            throws IllegalAccessException, InstantiationException {
         ModuleImporter moduleImporter = 
                 ModuleImporterFactory.getModuleImporter(configuration);
         if (moduleImporter != null) moduleImporter.importTo(settings);

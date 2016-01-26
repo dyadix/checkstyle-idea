@@ -9,31 +9,32 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 class ModuleImporterFactory {
-    
-    private static final String LINE_LENGTH_MODULE          = "LineLength";
-    private static final String EMPTY_LINE_SEPARATOR_MODULE = "EmptyLineSeparator";
-    private static final String FILE_TAB_CHAR_MODULE        = "FileTabCharacter";
-    private static final String WHITESPACE_AFTER_MODULE     = "WhitespaceAfter";
 
     @Nullable
-    static ModuleImporter getModuleImporter(@NotNull Configuration configuration) {
+    static ModuleImporter getModuleImporter(@NotNull Configuration configuration) 
+            throws InstantiationException, IllegalAccessException {
         String name = configuration.getName();
-        ModuleImporter moduleImporter = null;
-        if (LINE_LENGTH_MODULE.equals(name)) {
-            moduleImporter = new LineLengthImporter();
-        }
-        else if (EMPTY_LINE_SEPARATOR_MODULE.equals(name)) {
-            moduleImporter = new EmptyLineSeparatorImporter();
-        }
-        else if (FILE_TAB_CHAR_MODULE.equals(name)) {
-            moduleImporter = new FileTabCharacterImporter();
-        }
-        else if (WHITESPACE_AFTER_MODULE.equals(name)) {
-            moduleImporter = new WhitespaceAfterImporter();
-        }
+        ModuleImporter moduleImporter = createImporter(name);
         if (moduleImporter != null) {
             moduleImporter.setFrom(configuration);
         }
         return moduleImporter;
+    }
+    
+    @Nullable
+    private static ModuleImporter createImporter(@NotNull String name) 
+            throws IllegalAccessException, InstantiationException {
+        String fqn = getFullyQualifiedClassName(name);
+        try {
+            Class c = Class.forName(fqn);
+            Object o = c.newInstance();
+            return o instanceof ModuleImporter ? (ModuleImporter)o : null;
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+    
+    private static String getFullyQualifiedClassName(@NotNull String moduleName) {
+        return ModuleImporterFactory.class.getPackage().getName() + ".modules." + moduleName + "Importer";
     }
 }
