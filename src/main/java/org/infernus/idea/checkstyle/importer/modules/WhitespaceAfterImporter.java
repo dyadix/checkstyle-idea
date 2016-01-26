@@ -6,6 +6,7 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import org.infernus.idea.checkstyle.importer.ModuleImporter;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class WhitespaceAfterImporter extends ModuleImporter {
 
     @Override

@@ -7,6 +7,10 @@ import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public abstract class ModuleImporter {
     private final static String TOKENS_PROP = "tokens";
     private int[] tokens;
@@ -43,6 +47,24 @@ public abstract class ModuleImporter {
             return false;
         }
         return true;
+    }
+    
+    protected boolean appliesToOneOf(Set<Integer> tokenSet) {
+        if (tokens != null) {
+            for (int token : tokens) {
+                if (tokenSet.contains(token)) return true;
+            }
+            return false;
+        }
+        return true;
+    }
+    
+    protected static Set<Integer> setOf(int... ids) {
+        Set<Integer> tokenSet = new HashSet<>(ids.length);
+        for (int id : ids) {
+            tokenSet.add(id);
+        }
+        return tokenSet;
     }
     
     public abstract void importTo(@NotNull CodeStyleSettings settings);

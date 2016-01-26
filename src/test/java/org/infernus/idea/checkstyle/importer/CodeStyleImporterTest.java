@@ -125,4 +125,21 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         assertTrue(javaSettings.SPACE_AFTER_SEMICOLON);
         assertFalse(javaSettings.SPACE_AFTER_TYPE_CAST);
     }
+    
+    public void testImportWhitespaceAround() throws Exception {
+        javaSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS = false;
+        javaSettings.SPACE_AROUND_EQUALITY_OPERATORS = false;
+        javaSettings.SPACE_AROUND_BITWISE_OPERATORS = false;
+        importConfiguration(
+                inTreeWalker(
+                        "<module name=\"WhitespaceAround\">\n" +
+                        "    <property name=\"tokens\" value=\"ASSIGN\"/>\n" +
+                        "    <property name=\"tokens\" value=\"EQUAL\"/>\n" +
+                        "</module>"
+                )
+        );
+        assertTrue(javaSettings.SPACE_AROUND_ASSIGNMENT_OPERATORS);
+        assertTrue(javaSettings.SPACE_AROUND_EQUALITY_OPERATORS);
+        assertFalse(javaSettings.SPACE_AROUND_BITWISE_OPERATORS);
+    }
 }

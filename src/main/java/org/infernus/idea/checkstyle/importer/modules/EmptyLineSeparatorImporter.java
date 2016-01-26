@@ -6,6 +6,7 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import org.infernus.idea.checkstyle.importer.ModuleImporter;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class EmptyLineSeparatorImporter extends ModuleImporter {
     private boolean noEmptyLinesBetweenFields = false;
     private final static String NO_EMPTY_LINES_BETWEEN_FIELDS_PROP = "allowNoEmptyLineBetweenFields";

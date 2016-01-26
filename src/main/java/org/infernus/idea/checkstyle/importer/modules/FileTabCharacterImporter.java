@@ -7,6 +7,7 @@ import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import org.infernus.idea.checkstyle.importer.ModuleImporter;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class FileTabCharacterImporter extends ModuleImporter {
     private final static String FILE_EXTENSIONS_PROP = "fileExtensions";
     private String[] extensions;

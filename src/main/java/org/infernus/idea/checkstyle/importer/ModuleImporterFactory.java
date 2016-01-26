@@ -1,10 +1,6 @@
 package org.infernus.idea.checkstyle.importer;
 
 import com.puppycrawl.tools.checkstyle.api.Configuration;
-import org.infernus.idea.checkstyle.importer.modules.EmptyLineSeparatorImporter;
-import org.infernus.idea.checkstyle.importer.modules.FileTabCharacterImporter;
-import org.infernus.idea.checkstyle.importer.modules.LineLengthImporter;
-import org.infernus.idea.checkstyle.importer.modules.WhitespaceAfterImporter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
