@@ -142,4 +142,16 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         assertTrue(javaSettings.SPACE_AROUND_EQUALITY_OPERATORS);
         assertFalse(javaSettings.SPACE_AROUND_BITWISE_OPERATORS);
     }
+    
+    public void testNoWhitespaceBeforeImporter() throws Exception {
+        javaSettings.SPACE_BEFORE_SEMICOLON = true;
+        javaSettings.SPACE_BEFORE_COMMA = true;
+        importConfiguration(
+                inTreeWalker(
+                        "<module name=\"NoWhitespaceBefore\"/>"
+                )
+        );
+        assertFalse(javaSettings.SPACE_BEFORE_SEMICOLON);
+        assertFalse(javaSettings.SPACE_BEFORE_COMMA);
+    }
 }
