@@ -109,4 +109,20 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         assertFalse(javaIndentOptions.USE_TAB_CHARACTER);
         assertFalse(xmlIndentOptions.USE_TAB_CHARACTER);
     }
+    
+    public void testImportWhitespaceAfter() throws CheckstyleException {
+        javaSettings.SPACE_AFTER_COMMA = false;
+        javaSettings.SPACE_AFTER_SEMICOLON = false;
+        javaSettings.SPACE_AFTER_TYPE_CAST = false;
+        importConfiguration(
+                inTreeWalker(
+                        "<module name=\"WhitespaceAfter\">\n" +
+                        "    <property name=\"tokens\" value=\"COMMA, SEMI\"/>\n" +
+                        "</module>"
+                )
+        );
+        assertTrue(javaSettings.SPACE_AFTER_COMMA);
+        assertTrue(javaSettings.SPACE_AFTER_SEMICOLON);
+        assertFalse(javaSettings.SPACE_AFTER_TYPE_CAST);
+    }
 }
