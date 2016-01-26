@@ -2,6 +2,7 @@ package org.infernus.idea.checkstyle.importer;
 
 
 import com.intellij.lang.java.JavaLanguage;
+import com.intellij.lang.xml.XMLLanguage;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
 import com.intellij.testFramework.LightPlatformTestCase;
@@ -70,5 +71,42 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         );
         assertEquals(1, javaSettings.BLANK_LINES_AROUND_FIELD);
         assertEquals(1, javaSettings.BLANK_LINES_AROUND_METHOD);
+    }
+    
+    public void testImportFileTabCharacter() throws CheckstyleException {
+        CommonCodeStyleSettings xmlSettings = codeStyleSettings.getCommonSettings(XMLLanguage.INSTANCE);
+        CommonCodeStyleSettings.IndentOptions javaIndentOptions = javaSettings.getIndentOptions();
+        assertNotNull(javaIndentOptions);
+        CommonCodeStyleSettings.IndentOptions xmlIndentOptions = xmlSettings.getIndentOptions();
+        assertNotNull(xmlIndentOptions);
+        javaIndentOptions.USE_TAB_CHARACTER = true;
+        xmlIndentOptions.USE_TAB_CHARACTER = true;
+        importConfiguration(
+                inTreeWalker(
+                        "<module name=\"FileTabCharacter\">\n" +
+                        "    <property name=\"eachLine\" value=\"true\" />\n" +
+                        "    <property name=\"fileExtensions\" value=\"java,xml\" />\n" +
+                        "</module>"
+                )
+        );
+        assertFalse(javaIndentOptions.USE_TAB_CHARACTER);
+        assertFalse(xmlIndentOptions.USE_TAB_CHARACTER);
+    }
+    
+    public void testImportFileTabCharacterNoExplicitExtensions() throws CheckstyleException {
+        CommonCodeStyleSettings xmlSettings = codeStyleSettings.getCommonSettings(XMLLanguage.INSTANCE);
+        CommonCodeStyleSettings.IndentOptions javaIndentOptions = javaSettings.getIndentOptions();
+        assertNotNull(javaIndentOptions);
+        CommonCodeStyleSettings.IndentOptions xmlIndentOptions = xmlSettings.getIndentOptions();
+        assertNotNull(xmlIndentOptions);
+        javaIndentOptions.USE_TAB_CHARACTER = true;
+        xmlIndentOptions.USE_TAB_CHARACTER = true;
+        importConfiguration(
+                inTreeWalker(
+                        "<module name=\"FileTabCharacter\"/>\n"
+                )
+        );
+        assertFalse(javaIndentOptions.USE_TAB_CHARACTER);
+        assertFalse(xmlIndentOptions.USE_TAB_CHARACTER);
     }
 }

@@ -2,14 +2,16 @@ package org.infernus.idea.checkstyle.importer;
 
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import org.infernus.idea.checkstyle.importer.modules.EmptyLineSeparatorImporter;
+import org.infernus.idea.checkstyle.importer.modules.FileTabCharacterImporter;
 import org.infernus.idea.checkstyle.importer.modules.LineLengthImporter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 class ModuleImporterFactory {
     
-    private static final String LINE_LENGTH_MODULE = "LineLength";
+    private static final String LINE_LENGTH_MODULE          = "LineLength";
     private static final String EMPTY_LINE_SEPARATOR_MODULE = "EmptyLineSeparator";
+    private static final String FILE_TAB_CHAR_MODULE        = "FileTabCharacter";
 
     @Nullable
     static ModuleImporter getModuleImporter(@NotNull Configuration configuration) {
@@ -20,6 +22,9 @@ class ModuleImporterFactory {
         }
         else if (EMPTY_LINE_SEPARATOR_MODULE.equals(name)) {
             moduleImporter = new EmptyLineSeparatorImporter();
+        }
+        else if (FILE_TAB_CHAR_MODULE.equals(name)) {
+            moduleImporter = new FileTabCharacterImporter();
         }
         if (moduleImporter != null) {
             moduleImporter.setFrom(configuration);
