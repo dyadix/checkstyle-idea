@@ -2,7 +2,6 @@ package org.infernus.idea.checkstyle.importer.modules;
 
 import com.intellij.psi.codeStyle.CodeStyleSettings;
 import com.intellij.psi.codeStyle.CommonCodeStyleSettings;
-import com.puppycrawl.tools.checkstyle.api.Configuration;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import org.infernus.idea.checkstyle.importer.ModuleImporter;
 import org.jetbrains.annotations.NotNull;

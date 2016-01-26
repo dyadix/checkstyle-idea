@@ -14,7 +14,16 @@ import org.xml.sax.InputSource;
 import java.io.StringReader;
 
 public class CodeStyleImporterTest extends LightPlatformTestCase {
-    
+    private CodeStyleSettings codeStyleSettings;
+    private CommonCodeStyleSettings javaSettings;
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        codeStyleSettings = new CodeStyleSettings(false);
+        javaSettings = codeStyleSettings.getCommonSettings(JavaLanguage.INSTANCE);
+    }
+
     private final static String FILE_PREFIX = 
             "<?xml version=\"1.0\"?>\n" +
             "<!DOCTYPE module PUBLIC\n" +
@@ -24,11 +33,13 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
     private final static String FILE_SUFFIX =
             "</module>";
     
-    private CodeStyleSettings importConfiguration(@NotNull String configuration) throws CheckstyleException {
-        CodeStyleSettings styleSettings = new CodeStyleSettings(false);
+    private void importConfiguration(@NotNull String configuration) throws CheckstyleException {
         configuration = FILE_PREFIX + configuration + FILE_SUFFIX;
-        CheckStyleCodeStyleImporter.importConfiguration(loadConfiguration(configuration), styleSettings);
-        return styleSettings;
+        CheckStyleCodeStyleImporter.importConfiguration(loadConfiguration(configuration), codeStyleSettings);
+    }
+    
+    private String inTreeWalker(@NotNull String configuration) {
+        return "<module name=\"TreeWalker\">" + configuration + "</module>";
     }
     
     private Configuration loadConfiguration(@NotNull String configuration) throws CheckstyleException {
@@ -37,12 +48,27 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
     }
     
     public void testImportRightMargin() throws CheckstyleException {
-        CodeStyleSettings settings = importConfiguration(
-                "<module name=\"LineLength\">\n" +
-                "    <property name=\"max\" value=\"100\"/>\n" + 
-                "</module>"
+        importConfiguration(
+                inTreeWalker(
+                        "<module name=\"LineLength\">\n" +
+                        "    <property name=\"max\" value=\"100\"/>\n" +
+                        "</module>"
+                )
         );
-        CommonCodeStyleSettings javaSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
         assertEquals(100, javaSettings.RIGHT_MARGIN);
+    }
+    
+    public void testEmptyLineSeparator() throws CheckstyleException {
+        javaSettings.BLANK_LINES_AROUND_FIELD = 0;
+        javaSettings.BLANK_LINES_AROUND_METHOD = 0;
+        importConfiguration(
+                inTreeWalker(
+                        "<module name=\"EmptyLineSeparator\">\n" +
+                        "    <property name=\"tokens\" value=\"VARIABLE_DEF, METHOD_DEF\"/>\n" +
+                        "</module>"
+                )
+        );
+        assertEquals(1, javaSettings.BLANK_LINES_AROUND_FIELD);
+        assertEquals(1, javaSettings.BLANK_LINES_AROUND_METHOD);
     }
 }
