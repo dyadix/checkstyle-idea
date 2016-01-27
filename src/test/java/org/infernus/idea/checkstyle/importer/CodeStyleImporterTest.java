@@ -175,4 +175,20 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         assertEquals(CommonCodeStyleSettings.END_OF_LINE, javaSettings.METHOD_BRACE_STYLE);
         assertEquals(CommonCodeStyleSettings.END_OF_LINE, javaSettings.BRACE_STYLE);
     }
+    
+    public void testNeedBracesImporter() throws Exception {
+        javaSettings.DOWHILE_BRACE_FORCE = CommonCodeStyleSettings.DO_NOT_FORCE;
+        javaSettings.IF_BRACE_FORCE = CommonCodeStyleSettings.DO_NOT_FORCE;
+        javaSettings.FOR_BRACE_FORCE = CommonCodeStyleSettings.DO_NOT_FORCE;
+        importConfiguration(
+                inTreeWalker(
+                        "<module name=\"NeedBraces\">\n" +
+                        "    <property name=\"allowSingleLineStatement\" value=\"true\"/>\n" +
+                        "</module>"
+                )
+        );
+        assertEquals(CommonCodeStyleSettings.FORCE_BRACES_IF_MULTILINE, javaSettings.DOWHILE_BRACE_FORCE);
+        assertEquals(CommonCodeStyleSettings.FORCE_BRACES_IF_MULTILINE, javaSettings.IF_BRACE_FORCE);
+        assertEquals(CommonCodeStyleSettings.FORCE_BRACES_IF_MULTILINE, javaSettings.FOR_BRACE_FORCE);
+    }
 }
