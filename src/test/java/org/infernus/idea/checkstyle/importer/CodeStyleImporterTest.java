@@ -154,4 +154,25 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         assertFalse(javaSettings.SPACE_BEFORE_SEMICOLON);
         assertFalse(javaSettings.SPACE_BEFORE_COMMA);
     }
+    
+    public void testLeftCurlyImporter() throws Exception {
+        javaSettings.CLASS_BRACE_STYLE = CommonCodeStyleSettings.NEXT_LINE_SHIFTED;
+        javaSettings.METHOD_BRACE_STYLE =  CommonCodeStyleSettings.NEXT_LINE_SHIFTED;
+        javaSettings.BRACE_STYLE = CommonCodeStyleSettings.NEXT_LINE_SHIFTED;
+        importConfiguration(
+                inTreeWalker(
+                        "<module name=\"LeftCurly\">\n" +
+                        "    <property name=\"option\" value=\"nl\"/>\n" +
+                        "    <property name=\"tokens\" value=\"CLASS_DEF,INTERFACE_DEF\"/>\n" +
+                        "</module>\n" +
+                        "<module name=\"LeftCurly\">\n" +
+                        "    <property name=\"option\" value=\"eol\"/>\n" +
+                        "    <property name=\"tokens\" value=\"METHOD_DEF,LITERAL_IF\"/>\n" +
+                        "</module>"
+                )
+        );
+        assertEquals(CommonCodeStyleSettings.NEXT_LINE, javaSettings.CLASS_BRACE_STYLE);
+        assertEquals(CommonCodeStyleSettings.END_OF_LINE, javaSettings.METHOD_BRACE_STYLE);
+        assertEquals(CommonCodeStyleSettings.END_OF_LINE, javaSettings.BRACE_STYLE);
+    }
 }
