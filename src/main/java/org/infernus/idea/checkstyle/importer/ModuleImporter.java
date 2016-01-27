@@ -68,4 +68,12 @@ public abstract class ModuleImporter {
     }
     
     public abstract void importTo(@NotNull CodeStyleSettings settings);
+    
+    protected int getIntOrDefault(@NotNull String intStr, int defaultValue) {
+        try {
+            return Integer.parseInt(intStr);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
 }

@@ -191,4 +191,29 @@ public class CodeStyleImporterTest extends LightPlatformTestCase {
         assertEquals(CommonCodeStyleSettings.FORCE_BRACES_IF_MULTILINE, javaSettings.IF_BRACE_FORCE);
         assertEquals(CommonCodeStyleSettings.FORCE_BRACES_IF_MULTILINE, javaSettings.FOR_BRACE_FORCE);
     }
+    
+    public void testIndentationImporter() throws Exception {
+        javaSettings.INDENT_BREAK_FROM_CASE = false;
+        CommonCodeStyleSettings.IndentOptions indentOptions = javaSettings.getIndentOptions();
+        assertNotNull(indentOptions);
+        indentOptions.INDENT_SIZE = 8;
+        indentOptions.CONTINUATION_INDENT_SIZE = 8;
+        importConfiguration(
+                inTreeWalker(
+                        " <module name=\"Indentation\">\n" +
+                        "            <property name=\"basicOffset\" value=\"2\"/>\n" +
+                        "            <property name=\"braceAdjustment\" value=\"0\"/>\n" +
+                        "            <property name=\"caseIndent\" value=\"2\"/>\n" +
+                        "            <property name=\"throwsIndent\" value=\"4\"/>\n" +
+                        "            <property name=\"lineWrappingIndentation\" value=\"4\"/>\n" +
+                        "            <property name=\"arrayInitIndent\" value=\"2\"/>\n" +
+                        "</module>"
+                )
+        );
+        javaSettings.INDENT_BREAK_FROM_CASE = true;
+        indentOptions.INDENT_SIZE = 2;
+        indentOptions.CONTINUATION_INDENT_SIZE = 4;
+    }
+    
+    
 }
